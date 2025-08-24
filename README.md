@@ -65,7 +65,6 @@ It allows users to submit text and receive an analysis report showing the plagia
 - Jonathan
 - Samuel
 - Vanessa
-- [Other Team Members]
 
 ## Credits
 
