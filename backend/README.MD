@@ -6,23 +6,23 @@
 
 ## 🗂️ Estructura de Carpetas
 
-project-root/
-│
-├── src/
-│   ├── config/              # Configuración de DB y API
-│   ├── controllers/         # Controladores (endpoints)
-│   ├── models/              # Modelos Sequelize/MySQL
-│   ├── services/            # Lógica de negocio
-│   ├── routes/              # Rutas API
-│   ├── middlewares/         # Validaciones, errores, etc.
-│   ├── utils/               # Funciones de ayuda
-│   ├── uploads/             # Archivos subidos (system files)
-│   └── app.js               # Configuración Express
-│
-├── tests/                   # (Opcional) Unit tests
-├── .env                     # Variables de entorno
-├── package.json
-└── README.md
+    project-root/
+    │
+    ├── src/
+    │   ├── config/              # Configuración de DB y API
+    │   ├── controllers/         # Controladores (endpoints)
+    │   ├── models/              # Modelos Sequelize/MySQL
+    │   ├── services/            # Lógica de negocio
+    │   ├── routes/              # Rutas API
+    │   ├── middlewares/         # Validaciones, errores, etc.
+    │   ├── utils/               # Funciones de ayuda
+    │   ├── uploads/             # Archivos subidos (system files)
+    │   └── app.js               # Configuración Express
+    │
+    ├── tests/                   # (Opcional) Unit tests
+    ├── .env                     # Variables de entorno
+    ├── package.json
+    └── README.md
 
 ## ⚙️ Configuración de entorno
 
