@@ -1,33 +1,42 @@
-## 🔧 Pasos para crear tu entorno correctamente
+## Instala dependencias:
 
-Instala el módulo venv (si no está ya):
+    npm init -y
+    npm install express multer mysql2 sequelize dotenv axios openai
+    npm install --save-dev nodemon eslint prettier
 
-    sudo apt install python3.12-venv
+## 🗂️ Estructura de Carpetas
 
+project-root/
+│
+├── src/
+│   ├── config/              # Configuración de DB y API
+│   ├── controllers/         # Controladores (endpoints)
+│   ├── models/              # Modelos Sequelize/MySQL
+│   ├── services/            # Lógica de negocio
+│   ├── routes/              # Rutas API
+│   ├── middlewares/         # Validaciones, errores, etc.
+│   ├── utils/               # Funciones de ayuda
+│   ├── uploads/             # Archivos subidos (system files)
+│   └── app.js               # Configuración Express
+│
+├── tests/                   # (Opcional) Unit tests
+├── .env                     # Variables de entorno
+├── package.json
+└── README.md
 
-Crea un entorno virtual dentro de tu proyecto:
+## ⚙️ Configuración de entorno
 
-    python3 -m venv venv
+Crea un archivo .env en la raíz con:
 
+    # MySQL
+    DB_HOST=localhost
+    DB_USER=root
+    DB_PASSWORD=tu_password
+    DB_NAME=analisis_ia
+    DB_PORT=3306
 
-// Esto creará una carpeta venv/ con todo lo necesario.
+    # OpenAI
+    OPENAI_API_KEY=tu_api_key
 
-Activa el entorno virtual:
-
-    source venv/bin/activate
-
-### Extra (si más adelante quieres salir del entorno)
-
-Para desactivarlo:
-
-    deactivate
-
-
-Para volver a activarlo:
-
-    source venv/bin/activate
-
-
-para instalar todos los requerimientos:
-
-    pip install -r requeriments.txt
+    # Servidor
+    PORT=4000
