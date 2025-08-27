@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Orbis-detector/orbis-detector/issues"
   },
-  "homepage": "https://github.com/Orbis-detector/orbis-detector#readme"
+  "homepage": "https://github.com/Orbis-detector/orbis-detector#readme",
+  "dependencies": {
+    "cors": "^2.8.5"
+  }
 }
