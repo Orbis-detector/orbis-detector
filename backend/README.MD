@@ -26,7 +26,7 @@
 
 ## ⚙️ Configuración de entorno
 
-Crea un archivo .env en la raíz con:
+Creado un archivo .env en la raíz con:
 
     # MySQL
     DB_HOST=localhost
@@ -40,3 +40,29 @@ Crea un archivo .env en la raíz con:
 
     # Servidor
     PORT=4000
+
+## Tabla usada para el MVP
+
+--create tables submissions,Analysis,Feedbacks
+CREATE TABLE Submissions (
+    submission_id INT PRIMARY KEY AUTO_INCREMENT,
+    name_coder VARCHAR(100) NOT NULL,
+    name_training VARCHAR(100) NOT NULL,
+    file_url VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Analysis (
+    analysis_id INT PRIMARY KEY AUTO_INCREMENT,
+    submission_id INT NOT NULL,
+    ia_percentage DECIMAL(3,0) NOT NULL,
+    ia_detected BOOLEAN NOT NULL, -- 1=SÃ­, 0=No
+    explanation TEXT,
+    FOREIGN KEY (submission_id) REFERENCES Submissions(submission_id)
+);
+
+CREATE TABLE Feedbacks (
+    feedback_id INT PRIMARY KEY AUTO_INCREMENT,
+    analysis_id INT NOT NULL,
+    comment TEXT,
+    FOREIGN KEY (analysis_id) REFERENCES Analysis(analysis_id)
+);
