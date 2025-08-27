@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
 const fileRoutes = require("./routes/fileRoutes");
+const cors = require("cors");
 
 // Middlewares para procesar JSON y formularios
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
