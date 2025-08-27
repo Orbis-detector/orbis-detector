@@ -1,71 +1,105 @@
-# Plagiarism & AI Content Detector - MVP
+# Orbis AI Detector – MVP
 
 ## Description
 
-This project is an MVP to detect plagiarism and AI-generated content in coders' texts.  
-It allows users to submit text and receive an analysis report showing the plagiarism percentage, AI detection status, and source references.
+This project is a **Minimum Viable Product (MVP)** designed to detect AI-generated content in coders submissions.  
+It simulates the integration with **Moodle** by allowing coders to upload their assignments, automatically analyzing the file with **OpenAI**, and providing a **Team Leader (TL) panel** to review results and give feedback.  
+
+The goal is to support academic evaluation by highlighting potential AI-assisted work and streamlining the review process for instructors.  
+
+---
 
 ## Features
 
-- Upload text for plagiarism and AI content analysis.
-- Instant results displayed on the frontend.
-- Mock or real API integration for detection.
-- Simple, clean UI for usability.
+- **File Upload (Coder Simulation):** Submit a file (PDF) along with coder name and training name.  
+- **Automatic AI Detection:** Backend sends the file to OpenAI with a custom prompt that returns:  
+  - `ia_percentage` (0–100)  
+  - `ia_detected` (true/false, based on >50%)  
+  - `explanation` (brief text ≤200 characters)  
+- **Database Storage:** All submissions, analyses, and feedback are stored in a relational database.  
+- **Team Leader Panel:**  
+  - Table with all analyzed submissions.  
+  - Modal view with analysis details.  
+  - Ability to add, update, or delete feedback.  
+- **Simple Navigation:**  
+  - “Upload File” (Coder simulation).  
+  - “Show Analysis” (Team Leader view).  
+
+---
 
 ## Tech Stack
 
-- **Frontend:** HTML, CSS, JavaScript
-- **Backend:** Python, API
-- **Other Tools:** Bootstrap for styling, VSCode for development
+- **Frontend (Coder + TL Panel):** HTML, CSS, JavaScript (vanilla + Fetch API)  
+- **Backend:** Node.js with Express  
+- **Database:** MySQL  
+- **External API:** OpenAI API (custom JSON prompt for AI detection)  
+- **Other Tools:** GitHub Projects (SCRUM board), VSCode  
+
+---
 
 ## Project Structure
 
-    plagiarism-detector/
-    ├─ frontend/
-    │  ├─ index.html       # Página principal con textarea y botón
-    │  ├─ style.css        # Estilos del MVP
-    │  └─ script.js        # Lógica JS para enviar texto al backend y mostrar resultados
-    ├─ backend/
-    │  ├─ app.py           # Servidor Python (FastAPI) con endpoint /analyze
-    │  └─ requirements.txt # Dependencias Python (FastAPI, pydantic, requests si necesitas API externa)
-    ├─ README.md           # Descripción del proyecto, cómo ejecutar, stack, créditos
-    ├─ DocumentoTecnico.pdf # Documento técnico con objetivos, alcance, historias, diagramas
-    └─ wireframe.png        # Prototipo visual del MVP
+PENDIENTE
+
+---
 
 ## Getting Started
 
 ### Prerequisites
-
-`PENDIENTE`
+- Node.js and npm  
+- MySQL  
+- OpenAI API Key  
 
 ### Installation
 
-1. Clone the repository:
-    git clone [https://github.com/Moren0k/plagiarism-detector.git](https://github.com/Moren0k/plagiarism-detector.git)
-    cd plagiarism-detector
-
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/Orbis-detector/orbis-detector.git
+   cd orbis-detector
+   ```
 2. Install backend dependencies:
-`PENDIENTE`
+   ```bash
+   cd backend
+   npm install
+   ```
+3. Configure environment variables:
+   - Create a .env file in /backend with:
+    ```ini
+    OPENAI_API_KEY=your_api_key_here
+    DB_HOST=localhost
+    DB_USER=root
+    DB_PASSWORD=your_password
+    DB_NAME=orbis_ai_detector
+    ```
+4. Run the backend server:
+   ```bash
+   npm start
+   ```
+5. Open the frontend/index.html in your browser.
 
-3. Run the backend server:
-`PENDIENTE`
-
-4. Open `frontend/index.html` in your browser.
+---
 
 ## Usage
 
-1. Enter or paste text in the textarea.
-2. Click **Analyze**.
-3. View the results: plagiarism percentage, AI detection, and source links.
+### Navigate to **Upload File**
+1. Enter **coder name** and **training name**.  
+2. Upload a **PDF file**.  
+3. Click **Submit** → file is stored and sent to **OpenAI** for analysis.  
 
-## Team
+### 📊 Navigate to **Show Analysis**
+1. View table of all submissions with **AI detection status (Yes/No)**.  
+2. Click **“View Detail”** to open a modal with:  
+   - AI percentage  
+   - Explanation  
+   - Feedback textarea (create / update / delete)  
 
+---
+
+## 👥 Team
 - Kevin Moreno
-- Javier Narvaez
+- Javier Narváez
 - Jonathan
-- Samuel
+- Samuel 
 - Vanessa
 
-## Credits
-
-This project is part of the Riwi CodeUp Basic Route Integrator Project.
+---
