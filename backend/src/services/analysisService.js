@@ -2,24 +2,14 @@ import fs from 'fs';
 import OpenAI from 'openai';
 import path from 'path';
 import dotenv from 'dotenv';
+import {ANALYSIS_PROMPT} from '../config/analysisPrompts.js'
+import { createAnalysis } from '../models/Analysis.js';
+
 dotenv.config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
-
-const ANALYSIS_PROMPT = `
-Actúa como experto detector de contenido generado por IA. Analiza el archivo adjunto.
-
-IMPORTANTE: Responde ÚNICAMENTE con JSON válido en este formato exacto:
-{
-  "ia_percentage": [número entero 0-100],
-  "ia_detected": [true si >50%, false si ≤50%],
-  "explanation": "[máximo 200 caracteres explicando tu análisis]"
-}
-
-No agregues texto adicional fuera del JSON.
-`;
 
 export const uploadFileToOpenAI = async (filePath) => {
 
@@ -74,11 +64,25 @@ export const analyseFileWithGPT = async (fileId) => {
     }
 };
 
-export const proccessFileAnalysis = async (filePath) => {
+export const proccessFileAnalysisAndSave = async (filePath, dbFileId) => {
     try {
-        const fileId = await uploadFileToOpenAI(filePath);
-        const analysis = await analyseFileWithGPT(fileId);
-        return analysis;
+        // Logica
+        const fileIdOpenAI = await uploadFileToOpenAI(filePath);
+        const analysis = await analyseFileWithGPT(fileIdOpenAI);
+
+        //  Guardar
+        const analysisId = await createAnalysis(
+            dbFileId,
+            analysis.ia_percentage,
+            analysis.ia_detected,
+            analysis.explanation
+        );
+
+        return {
+            analysis_id : analysisId,
+            file_id : dbFileId,
+            ...analysis
+        };
     } catch (err) {
         console.error("Error al procesar el análisis del archivo:", err);
         throw err;
