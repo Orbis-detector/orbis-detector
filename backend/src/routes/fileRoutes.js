@@ -1,26 +1,14 @@
-const expresss = require("express");
-const router = expresss.Router();
-const upload = require("../middlewares/uploadMiddleware"); // middleware multer
-const { uploadFile } = require("../controllers/fileController");
+import express from "express";
+import upload from "../middlewares/uploadMiddleware.js"; 
+import { uploadFile, getFile } from "../controllers/fileController.js";
 
-// Ruta POST /api/files/upload
-router.post("/upload", upload.single("file"), (req, res) => {
-    const coderName = req.body.coderName;
-    const trainingName = req.body.trainingName;
-    console.log("Coder:", coderName, "- Training:", trainingName);
-  
-    if (!req.file) return res.status(400).json({ message: "No se recibió el archivo" });
+const router = express.Router();
 
-    res.status(200).json({
-        message: "Archivo subido correctamente",
-        data: {
-            filename: req.file.filename, // nombre guardado en el servidor
-            originalName: req.file.originalname, // nombre que subió el usuario
-            path: req.file.path, // ruta completa en el servidor
-            coderName,
-            trainingName
-        }
-    });
-});
+// Ruta POST /api/files/upload que va a subir archivo
+// Usa multer (upload.single) para procesar el archivo y luego pasa al controlador
+router.post("/upload", upload.single("file"), uploadFile);
 
-module.exports = router;
+// Ruta GET /api/files/:id para obtener archivo por ID
+router.get("/:id", getFile);
+
+export default router;
