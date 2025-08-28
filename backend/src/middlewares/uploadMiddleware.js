@@ -1,21 +1,26 @@
-// Librerias
-const multer = require("multer");
-const path = require("path");
+// Librerías
+import multer from "multer";
+import path from "path";
 
-// Configuración de Multer (Para guardar archivos en el disco)
+// Configuración de Multer para guardar archivos en disco
 const storage = multer.diskStorage({
-    // Carpeta destino donde ser guardan los archivos
-    destination:(req, file, cb) => { // cb es una función Callback que Multer usa
-        cb(null, "uploads/");
-    },
+  // Carpeta destino donde se guardarán los archivos subidos
+  destination: (req, file, cb) => {
+    // cb = callback que usa Multer para definir dónde guardar
+    cb(null, "uploads/");
+  },
 
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
+  // Definir el nombre final con el que se guardará cada archivo
+  filename: (req, file, cb) => {
+    // uniqueSuffix = marca de tiempo + número aleatorio
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    // El archivo conserva su extensión original (ej: .pdf, .jpg, etc.)
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  },
 });
 
-// Middleware listo para usar en las rutas
+// Middleware de Multer listo para usarse en rutas
+// (ejemplo: upload.single("file"))
 const upload = multer({ storage });
 
-module.exports = upload;
+export default upload;
