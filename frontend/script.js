@@ -1,89 +1,86 @@
-// Selecciona todas las filas dentro del <tbody> de la tabla
-document.querySelectorAll("tbody tr").forEach((fila) => {
-  // Agrega un listener para cuando se haga click en la fila
-  fila.addEventListener("click", () => {
-    // Obtiene los valores de cada columna de la fila
-    const nombre = fila.children[0]?.innerText; // Primer columna: nombre
-    const entrenamiento = fila.children[1]?.innerText; // Segunda columna: entrenamiento
-    const tieneIA = fila.children[2]?.innerText; // Tercera columna: si tiene IA
+// Select all table rows inside <tbody>
 
-    // Obtiene los elementos del DOM donde se mostrará la info
-    const iaDetectada = document.getElementById("ia-detectada"); // Porcentaje de IA detectada
-    const iaApi = document.getElementById("ia-api"); // Nombre del modelo detectado
-    const popup = document.getElementById("popup"); // Ventana emergente
+document.querySelectorAll("tbody tr").forEach((row) => {
+  // Add an event listener when the row is clicked
+  row.addEventListener("click", () => {
+    // Get the values from each column of the row
+    const coderName = row.children[0]?.innerText;      
+    const trainingName = row.children[1]?.innerText;   
+    const hasAI = row.children[2]?.innerText;          
 
-    // Si todos los elementos existen, actualiza sus valores y muestra el popup
-    if (iaDetectada && iaApi && popup) {
-      iaDetectada.innerText = tieneIA === "Sí" ? "92%" : "5%"; // Muestra el porcentaje según tenga IA
-      iaApi.innerText = tieneIA === "Sí" ? "OpenAI GPT-4" : "Sin IA detectada"; // Muestra el modelo o mensaje
-      popup.style.display = "flex"; // Muestra la ventana emergente
+    // Get DOM elements where the info will be displayed
+    const aiDetected = document.getElementById("ai-detected"); 
+    const aiApi = document.getElementById("ai-api");           
+    const popup = document.getElementById("popup");            
+
+    // If all elements exist, update their values and show the popup
+    if (aiDetected && aiApi && popup) {
+      aiDetected.innerText = hasAI === "Yes" ? "92%" : "5%"; 
+      aiApi.innerText = hasAI === "Yes" ? "OpenAI GPT-4" : "No AI detected"; 
+      popup.style.display = "flex"; 
     }
   });
 });
 
-// Obtiene el botón de cerrar
-const cerrarBtn = document.getElementById("cerrar");
-if (cerrarBtn) {
-  // Cuando se hace click en el botón, oculta la ventana emergente
-  cerrarBtn.addEventListener("click", () => {
+// Get the close button
+const closeBtn = document.getElementById("close");
+if (closeBtn) {
+  // When the close button is clicked, hide the popup
+  closeBtn.addEventListener("click", () => {
     const popup = document.getElementById("popup");
-    if (popup) popup.style.display = "none"; // Oculta el popup
+    if (popup) popup.style.display = "none"; 
   });
 }
 
-// Obtiene los elementos de feedback y botones
-const feedback = document.getElementById("feedback"); // Textarea para comentarios
-const btnEliminar = document.getElementById("eliminar"); // Botón de limpiar
-const btnGuardar = document.getElementById("guardar"); // Botón de guardar
+// Get feedback elements and buttons
+const feedback = document.getElementById("feedback"); // Textarea for comments
+const btnDelete = document.getElementById("delete"); // Delete button
+const btnSave = document.getElementById("save");     // Save button
 
-// Solo se agrega funcionalidad si todos los elementos existen
-if (feedback && btnEliminar && btnGuardar) {
-  // Botón eliminar: limpia el textarea
-  btnEliminar.addEventListener("click", () => {
+// Only add functionality if all elements exist
+if (feedback && btnDelete && btnSave) {
+  // Delete button: clears the textarea
+  btnDelete.addEventListener("click", () => {
     feedback.value = "";
   });
 
-  // Botón guardar: guarda el feedback en localStorage
-  btnGuardar.addEventListener("click", () => {
-    const texto = feedback.value.trim(); // Quita espacios al inicio y final
-    if (texto) {
-      console.log("Feedback guardado:", texto); // Muestra en consola
-      localStorage.setItem("feedback", texto); // Guarda en localStorage
-      alert("Feedback guardado correctamente"); // Notifica al usuario
+  // Save button: saves feedback in localStorage
+  btnSave.addEventListener("click", () => {
+    const text = feedback.value.trim(); // Remove extra spaces
+    if (text) {
+      console.log("Feedback saved:", text);
+      localStorage.setItem("feedback", text); 
+      alert("Feedback saved successfully"); 
     } else {
-      alert("No hay feedback para guardar"); // Si no hay texto, alerta
+      alert("No feedback to save"); 
     }
   });
 }
 
-
-
-
-
-// Captura la info del frontend y la envía al backend
-// Referencia a los elementos del formulario
-const nameCoder = document.getElementById("nombreCoder");
-const nameTraining = document.getElementById("nombreEntrega");
+// Capture form info and send it to the backend
+// References to form elements
+const inputCoderName = document.getElementById("coderName");
+const inputDeliveryName = document.getElementById("deliveryName");
 const fileInput = document.getElementById("fileInput");
 const submitBtn = document.querySelector(".primary-btn");
 
-// Solo si existe el botón (evitamos error en historialEntregas.html)
-if (submitBtn && nameCoder && nameTraining && fileInput) {
+// Only if the button exists (avoids error in deliveryHistory.html)
+if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
   submitBtn.addEventListener("click", async () => {
-    // Validación
-    if (!nameCoder.value || !nameTraining.value || !fileInput.files.length) {
-      alert("Por favor completa todos los campos y selecciona un archivo");
+    // Validation
+    if (!inputCoderName.value || !inputDeliveryName.value || !fileInput.files.length) {
+      alert("Please fill in all fields and select a file");
       return;
     }
 
-    // Crear objeto FormData
+    // Create FormData object
     const formData = new FormData();
-    formData.append("coderName", nameCoder.value);
-    formData.append("trainingName", nameTraining.value);
+    formData.append("coderName", inputCoderName.value);
+    formData.append("trainingName", inputDeliveryName.value);
     formData.append("file", fileInput.files[0]);
 
     try {
-      // Enviar los datos al Backend
+      // Send data to the backend
       const response = await fetch("http://localhost:3000/api/files/upload", {
         method: "POST",
         body: formData,
@@ -92,17 +89,17 @@ if (submitBtn && nameCoder && nameTraining && fileInput) {
       const result = await response.json();
 
       if (response.ok) {
-        alert("Archivo subido con éxito");
-        // Resetear formulario
-        nameCoder.value = "";
-        nameTraining.value = "";
+        alert("File uploaded successfully");
+        // Reset form
+        inputCoderName.value = "";
+        inputDeliveryName.value = "";
         fileInput.value = "";
       } else {
-        alert("Ocurrió un error: " + result.message);
+        alert("An error occurred: " + result.message);
       }
     } catch (error) {
-      console.log("Error al enviar la entrega:", error);
-      alert("Ocurrió un error en la conexión con el servidor");
+      console.log("Error sending delivery:", error);
+      alert("An error occurred while connecting to the server");
     }
   });
 }
