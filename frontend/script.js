@@ -1,5 +1,4 @@
 // Select all table rows inside <tbody>
-
 document.querySelectorAll("tbody tr").forEach((row) => {
   // Add an event listener when the row is clicked
   row.addEventListener("click", () => {
@@ -9,9 +8,9 @@ document.querySelectorAll("tbody tr").forEach((row) => {
     const hasAI = row.children[2]?.innerText;          
 
     // Get DOM elements where the info will be displayed
-    const aiDetected = document.getElementById("ai-detected"); 
-    const aiApi = document.getElementById("ai-api");           
-    const popup = document.getElementById("popup");            
+    const popup = document.getElementById("popup"); 
+    const aiDetected = document.getElementById("ia_percentage"); 
+    const aiApi = document.getElementById("ai-comment");           
 
     // If all elements exist, update their values and show the popup
     if (aiDetected && aiApi && popup) {
@@ -102,4 +101,4 @@ if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
       alert("An error occurred while connecting to the server");
     }
   });
-}
+};

@@ -46,6 +46,7 @@ PENDIENTE
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js and npm  
 - MySQL  
 - OpenAI API Key  
@@ -53,28 +54,36 @@ PENDIENTE
 ### Installation
 
 1. Clone the repository:  
+
    ```bash
    git clone https://github.com/Orbis-detector/orbis-detector.git
    cd orbis-detector
    ```
+
 2. Install backend dependencies:
+
    ```bash
    cd backend
    npm install
    ```
+
 3. Configure environment variables:
    - Create a .env file in /backend with:
+
     ```ini
-    OPENAI_API_KEY=your_api_key_here
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASSWORD=your_password
-    DB_NAME=orbis_ai_detector
+    OPENAI_API_KEY=api_key_here
+    DB_HOST=host
+    DB_USER=user
+    DB_PASSWORD=password
+    DB_NAME=data_base
     ```
+
 4. Run the backend server:
+
    ```bash
    npm start
    ```
+
 5. Open the frontend/index.html in your browser.
 
 ---
@@ -82,11 +91,13 @@ PENDIENTE
 ## Usage
 
 ### Navigate to **Upload File**
+
 1. Enter **coder name** and **training name**.  
 2. Upload a **PDF file**.  
 3. Click **Submit** → file is stored and sent to **OpenAI** for analysis.  
 
-### 📊 Navigate to **Show Analysis**
+### Navigate to **Show Analysis**
+
 1. View table of all submissions with **AI detection status (Yes/No)**.  
 2. Click **“View Detail”** to open a modal with:  
    - AI percentage  
@@ -95,11 +106,12 @@ PENDIENTE
 
 ---
 
-## 👥 Team
+## Team
+
 - Kevin Moreno
 - Javier Narváez
 - Jonathan
-- Samuel 
+- Samuel
 - Vanessa
 
 ---

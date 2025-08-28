@@ -1,115 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Delivery History</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery History</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <!-- Header -->
-  <header class="top-header">
-    <div class="brand-box">
-      <img src="/frontend/images/riwi.png" alt="Riwi Logo">
-    </div>
-    <div class="header-dot"></div>
-  </header>
-
-  <!-- Main Layout -->
-  <div class="app">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <nav class="menu">
-        <a href="/frontend/index.html" class="menu-item">Make a Delivery</a>
-        <a href="/frontend/historialEntregas.html" class="menu-item active">Delivery History</a>
-      </nav>
-    </aside>
-
-    <!-- Main -->
-    <main class="main">
-      <h2 class="page-title">Select module and week to filter files</h2>
-
-      <section class="history-card">
-        <header class="history-header">
-          Orbis Detector
-        </header>
-
-        <div class="filters">
-          <div class="filter-box">
-            <label for="module">Module</label>
-            <select id="module">
-              <option>Module 1</option>
-              <option>Module 2</option>
-              <option>Module 3</option>
-            </select>
-          </div>
-
-          <div class="filter-box">
-            <label for="week">Week</label>
-            <select id="week">
-              <option>Week 1</option>
-              <option>Week 2</option>
-              <option>Week 3</option>
-            </select>
-          </div>
-
-          <button class="primary-btn">Search</button>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="brand-box">
+            <img src="./images/logo_riwi.png" alt="Logo de Riwi">
         </div>
+        <div class="header-dot"></div>
+    </header>
 
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Coder Name</th>
-                <th>Delivery Name</th>
-                <th>AI Detected Yes/No</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>John Smith</td>
-                <td>Training 1</td>
-                <td>Yes</td>
-              </tr>
-              <tr>
-                <td>Mary Johnson</td>
-                <td>Training 2</td>
-                <td>No</td>
-              </tr>
-            </tbody>
-          </table>
+    <!-- Main Layout -->
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="menu">
+                <a href="index.html" class="menu-item">Make a Delivery</a>
+                <a href="historialEntregas.html" class="menu-item active">Delivery History</a>
+            </nav>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <h2 class="page-title">Select module and week to filter files</h2>
+
+            <section class="history-card">
+                <header class="history-header">
+                    Orbis Detector
+                </header>
+
+                <div class="filters">
+                    <div class="filter-box">
+                        <label for="module">Module</label>
+                        <select id="module">
+                            <option>Module 1</option>
+                            <option>Module 2</option>
+                            <option>Module 3</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-box">
+                        <label for="week">Week</label>
+                        <select id="week">
+                            <option>Week 1</option>
+                            <option>Week 2</option>
+                            <option>Week 3</option>
+                        </select>
+                    </div>
+
+                    <button class="primary-btn">Search</button>
+                </div>
+
+                <div class="table-container">
+                    <table id="submissionTable">
+                        <thead>
+                            <tr>
+                                <th>Coder Name</th>
+                                <th>Delivery Name</th>
+                                <th>AI Detected Yes/No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Here the data will be filled dynamically -->
+                            <tr>
+                                <td>John Doe</td>
+                                <td>Project 1</td>
+                                <td>Yes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- POPUP MODAL -->
+    <div id="popup" class="popup-overlay" style="display:none;">
+        <div class="popup-content">
+            <h2>AI Analysis Results</h2>
+
+            <!-- Results Section -->
+            <div class="results">
+                <div class="result-box">
+                    <p><strong>% AI Detected</strong></p>
+                    <p id="ia_percentage"></p>
+                </div>
+                <div class="result-box">
+                    <p><strong>AI API Analyzed</strong></p>
+                    <p id="ai-comment"></p>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="feedback-box">
+                <p><strong>Feedback area for the teacher</strong></p>
+                <textarea id="feedback" placeholder="Write your comments..."></textarea>
+            </div>
+
+            <div class="popup-buttons">
+                <button class="btn" id="delete">Delete Feedback</button>
+                <button class="btn" id="save">Save Feedback</button>
+                <button class="btn" id="close">Close</button>
+            </div>
         </div>
-      </section>
-
-     <!-- POPUP MODAL -->
-<div id="popup" class="popup-overlay">
-  <div class="popup-content">
-    <h2>AI Analysis Results</h2>
-
-    <div class="results">
-      <div class="result-box">
-        <p><strong>% AI Detected</strong></p>
-        <p id="ai-detected">85%</p>
-      </div>
-      <div class="result-box">
-        <p><strong>AI API Analyzed</strong></p>
-        <p id="ai-api">GPT-4</p>
-      </div>
     </div>
 
-    <div class="feedback-box">
-      <p><strong>Feedback area for the teacher</strong></p>
-      <textarea id="feedback" placeholder="Write your comments..."></textarea>
-    </div>
-
-    <div class="popup-buttons">
-      <button class="btn" id="delete">Delete Feedback</button>
-      <button class="btn" id="save">Save Feedback</button>
-      <button class="btn" id="close">Close</button>
-    </div>
-  </div>
-</div>
-
-  <script src="/frontend/script.js" type="module"></script>
+    <script src="script.js" type="module"></script>
 </body>
+
 </html>
