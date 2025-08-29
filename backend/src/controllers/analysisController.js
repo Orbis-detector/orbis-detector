@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from "path";
 import { fetchFileById } from "../services/fileService.js";
 import { proccessFileAnalysisAndSave } from "../services/analysisService.js";
@@ -16,14 +17,16 @@ export const analyzeFile = async (req, res) => {
 
     // Buscar archivo en BD
     const fileRecord = await fetchFileById(dbFileId);
-    
     if (!fileRecord) {
       return res.status(404).json({ error: "Archivo no encontrado" });
     }
 
     
     // Construir ruta absoluta desde la relativa guardada en BD
-    const absolutePath = path.join(process.cwd(), "src",fileRecord.file_url);
+    const absolutePath = path.join(process.cwd(), "src", file.file_path);
+    if (!fs.existsSync(absolutePath)) {
+      return res.status(404).json({ error: "El archivo no está disponible en la carpeta" });
+    }
 
     // Procesar con IA
     const aiResult = await proccessFileAnalysisAndSave(absolutePath, dbFileId);

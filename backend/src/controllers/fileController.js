@@ -1,4 +1,5 @@
 import { processUploadFile, fetchFileById } from "../services/fileService.js";
+import eventBus, { EVENTS } from '../events.js'
 
 // Controlador para subir un archivo
 export const uploadFile = async (req, res) => {
@@ -7,6 +8,9 @@ export const uploadFile = async (req, res) => {
 
     // Llamada al service
     const result = await processUploadFile(coderName, trainingName, req.file);
+
+    console.log("Objeto emitido en evento FILE_UPLOADED:", result);
+    eventBus.emit(EVENTS.FILE_UPLOADED, result);
 
     return res.status(201).json({
       message: "Archivo recibido con éxito",
