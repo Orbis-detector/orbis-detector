@@ -1,35 +1,57 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Entrega Riwi</title>
-  <link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riwi Delivery</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!--Header-->
-  <header class="top-header">
-    <div class="brand-box">
-      <img src="/frontend/images/riwi.png" alt="Logo Riwi">
-    </div>
-    <div class="header-dot" aria-hidden="true"></div>
-  </header>
-
-  <!--Contenedor principal-->
-  <div class="app">
-    <aside class="sidebar">
-      <nav class="menu">
-        <a href="/frontend/index.html" class="menu-item active">Hacer entrega</a>
-        <a href="/frontend/historialEntregas.html" class="menu-item">Historial de entrega</a>
-      </nav>
-    </aside>
-
-    <main class="main">
-      <section class="upload-card" aria-labelledby="titulo-upload">
-        <div class="upload-head">
-          <button class="icon-btn" aria-label="Ver detalles">📄</button>
-          <button class="icon-btn" aria-label="Descargar">⬇️</button>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="brand-box">
+            <img src="/frontend/images/logo_riwi.png" alt="Riwi Logo">
         </div>
+        <div class="header-dot" aria-hidden="true"></div>
+    </header>
+
+    <!-- Main container -->
+    <div class="app">
+        <aside class="sidebar">
+            <nav class="menu">
+                <a href="/frontend/index.html" class="menu-item active">Make a Delivery</a>
+                <a href="/frontend/historialEntregas.html" class="menu-item">Delivery History</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <section class="upload-card" aria-labelledby="upload-title">
+                <div class="upload-head">
+                    <button class="icon-btn" aria-label="View details">📄</button>
+                    <button class="icon-btn" aria-label="Download">⬇️</button>
+                </div>
+
+                <div class="upload-body">
+                    <p id="upload-title" class="upload-title">UPLOAD A FILE</p>
+
+                    <!-- Inputs -->
+                    <input type="text" id="coderName" class="text-input" placeholder="Coder name">
+                    <input type="text" id="deliveryName" class="text-input" placeholder="Delivery name">
+
+                    <!-- Upload zone -->
+                    <label class="dropzone" for="fileInput" role="button" aria-label="Select file to upload">
+                        <span class="dropzone-icon">⬇️</span>
+                        <input id="fileInput" type="file" hidden />
+                    </label>
+                </div>
+            </section>
+
+            <button class="primary-btn">Add Delivery</button>
+        </main>
+    </div>
+    <script src="/frontend/script.js"></script>
+</body>
 
         <div class="upload-body">
           <p id="titulo-upload" class="upload-title">SUBE UN ARCHIVO</p>

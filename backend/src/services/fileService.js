@@ -16,6 +16,7 @@ export const processUploadFile = async (coderName, trainingName, file) => {
     // Guardar en la base de datos (Submissions) y obtener el ID generado
     const fileId = await createFile(coderName, trainingName, relativePath);
 
+
     // Retornar un objeto con toda la información relevante
     return {
         file_id: fileId, // ID del archivo en DB

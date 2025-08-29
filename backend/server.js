@@ -8,10 +8,10 @@ import analysisRoutes from "./src/routes/analysisRoutes.js";
 import eventBus, {EVENTS} from "./src/events.js";
 import {proccessFileAnalysisAndSave } from "./src/services/analysisService.js";
 
+
 dotenv.config();
 
 const app = express();
-
 // Probar conexión a la base de datos al iniciar
 testConnection();
 
