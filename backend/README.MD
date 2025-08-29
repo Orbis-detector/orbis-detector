@@ -45,7 +45,7 @@ Creado un archivo .env en la raíz con:
 
 ## Tabla usada para el MVP
 
-    CREATE TABLE Submission (
+    CREATE TABLE Submissions (
         submission_id INT AUTO_INCREMENT PRIMARY KEY,
         name_coder VARCHAR(100) NOT NULL,
         name_training VARCHAR(100) NOT NULL,
@@ -62,7 +62,7 @@ Creado un archivo .env en la raíz con:
             ON DELETE CASCADE
     );
 
-    CREATE TABLE Feedback (
+    CREATE TABLE Feedbacks (
         feedback_id INT AUTO_INCREMENT PRIMARY KEY,
         analysis_id INT NOT NULL UNIQUE,
         comment TEXT,
