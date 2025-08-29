@@ -2,12 +2,15 @@
 import multer from "multer";
 import path from "path";
 
+// Ruta absoluta a la carpeta uploads
+const uploadPath = path.join(process.cwd(), "src", "uploads");
+
 // Configuración de Multer para guardar archivos en disco
 const storage = multer.diskStorage({
   // Carpeta destino donde se guardarán los archivos subidos
   destination: (req, file, cb) => {
     // cb = callback que usa Multer para definir dónde guardar
-    cb(null, "uploads/");
+    cb(null, uploadPath);
   },
 
   // Definir el nombre final con el que se guardará cada archivo

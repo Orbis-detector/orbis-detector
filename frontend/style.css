@@ -40,6 +40,7 @@ body { display: flex; flex-direction: column; background: #f3f1f1; }
   border-radius: 50%;
 }
 
+
 /* Layout */
 .app{
   display: flex;
@@ -78,6 +79,7 @@ body { display: flex; flex-direction: column; background: #f3f1f1; }
   gap: var(--gap);
   padding: 24px;
 }
+
 
 /* Upload Card */
 .upload-card{
@@ -131,7 +133,9 @@ body { display: flex; flex-direction: column; background: #f3f1f1; }
   line-height: 1;
 }
 
+
 /* Primary Button */
+
 .primary-btn{
   background: var(--navy);
   color: var(--white);
@@ -166,6 +170,7 @@ body { display: flex; flex-direction: column; background: #f3f1f1; }
   margin-bottom: 20px;
   text-align: center;
 }
+
 
 /* History Card */
 .history-card{
@@ -207,6 +212,7 @@ body { display: flex; flex-direction: column; background: #f3f1f1; }
   min-width: 160px;
 }
 
+
 /* Table */
 .table-container{
   width: 100%;
@@ -236,6 +242,7 @@ table tbody tr:nth-child(even){
 table tbody tr:hover{
   background: #eef2ff;
 }
+
 
 /* === POPUP STYLES === */
 .popup-overlay {
@@ -290,6 +297,7 @@ table tbody tr:hover{
   margin-top: 1rem;
 }
 
+
 /* Base button style */
 .btn {
   border: none;
@@ -327,6 +335,7 @@ table tbody tr:hover{
   from {opacity: 0; transform: scale(0.9);}
   to {opacity: 1; transform: scale(1);}
 }
+
 
 /* === Responsive === */
 
@@ -399,4 +408,3 @@ table tbody tr:hover{
     padding: 1rem;
   }
 }
-

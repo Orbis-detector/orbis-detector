@@ -46,7 +46,6 @@ PENDIENTE
 ## Getting Started
 
 ### Prerequisites
-
 - Node.js and npm  
 - MySQL  
 - OpenAI API Key  
@@ -61,7 +60,6 @@ PENDIENTE
    ```
 
 2. Install backend dependencies:
-
    ```bash
    cd backend
    npm install
@@ -91,7 +89,7 @@ PENDIENTE
 ## Usage
 
 ### Navigate to **Upload File**
-
+ 
 1. Enter **coder name** and **training name**.  
 2. Upload a **PDF file**.  
 3. Click **Submit** → file is stored and sent to **OpenAI** for analysis.  
@@ -106,12 +104,20 @@ PENDIENTE
 
 ---
 
-## Team
+### 📊 Navigate to **Show Analysis**
+1. View table of all submissions with **AI detection status (Yes/No)**.  
+2. Click **“View Detail”** to open a modal with:  
+   - AI percentage  
+   - Explanation  
+   - Feedback textarea (create / update / delete)  
 
+---
+
+## 👥 Team
 - Kevin Moreno
 - Javier Narváez
 - Jonathan
-- Samuel
+- Samuel 
 - Vanessa
 
 ---

@@ -7,7 +7,6 @@
     <title>Riwi Delivery</title>
     <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
     <!-- Header -->
     <header class="top-header">
@@ -54,4 +53,24 @@
     <script src="/frontend/script.js"></script>
 </body>
 
+        <div class="upload-body">
+          <p id="titulo-upload" class="upload-title">SUBE UN ARCHIVO</p>
+
+          <!-- Inputs -->
+          <input type="text" id="nombreCoder" class="text-input" placeholder="Nombre del coder">
+          <input type="text" id="nombreEntrega" class="text-input" placeholder="Nombre del entregable">
+
+          <!--Zona de subida-->
+          <label class="dropzone" for="fileInput" role="button" aria-label="Seleccionar archivo para subir">
+            <span class="dropzone-icon">⬇️</span>
+            <input id="fileInput" type="file" hidden />
+          </label>
+        </div>
+      </section>
+
+      <button class="primary-btn">Agregar Entrega</button>
+    </main>
+  </div>
+  <script src="/frontend/script.js"></script>
+</body>
 </html>

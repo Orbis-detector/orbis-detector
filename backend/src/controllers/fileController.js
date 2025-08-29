@@ -1,43 +1,39 @@
 import { processUploadFile, fetchFileById } from "../services/fileService.js";
+import eventBus, { EVENTS } from '../events.js'
 
-//Controlador para subir un archivo.
-//Recibe req.file (multer) + campos en req.body y delega al service.
+// Controlador para subir un archivo
 export const uploadFile = async (req, res) => {
   try {
-    const { coderName, trainingName } = req.body; // datos del formulario
-    const file = req.file; // archivo procesado por multer
+    const { coderName, trainingName } = req.body;
 
-    // Llamada al service que valida, guarda en DB y devuelve info del archivo
-    const result = await processUploadFile(coderName, trainingName, file);
+    // Llamada al service
+    const result = await processUploadFile(coderName, trainingName, req.file);
 
-    // Responder con éxito (201 = creado)
+    console.log("Objeto emitido en evento FILE_UPLOADED:", result);
+    eventBus.emit(EVENTS.FILE_UPLOADED, result);
+
     return res.status(201).json({
-        message: "Archivo recibido con éxito",
-        data: result,
-        download_url: `/uploads/${result.original_name}`, // o el filename único
-        data: result
+      message: "Archivo recibido con éxito",
+      data: result,
     });
   } catch (error) {
-    // Error de validación / DB / etc.
-    return res.status(400).json({ message: error.message });
+    console.error("Error en uploadFile:", error);
+    return res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
-// Controlador para obtener un archivo por su ID (params.id).
+// Controlador para obtener un archivo por su ID
 export const getFile = async (req, res) => {
   try {
-    const { id } = req.params; // id viene en la URL
+    const { id } = req.params;
 
-    // Buscar en DB vía service
     const file = await fetchFileById(id);
 
-    // Responder con el registro encontrado
     return res.status(200).json({
       message: "Archivo encontrado",
       data: file,
     });
   } catch (error) {
-    // Si no existe o falló la búsqueda
     return res.status(404).json({ message: error.message });
   }
 };

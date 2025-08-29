@@ -1,3 +1,4 @@
+
 // Select all table rows inside <tbody>
 document.querySelectorAll("tbody tr").forEach((row) => {
   // Add an event listener when the row is clicked
@@ -102,3 +103,4 @@ if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
     }
   });
 };
+

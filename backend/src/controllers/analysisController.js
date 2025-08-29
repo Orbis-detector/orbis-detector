@@ -1,20 +1,43 @@
+import fs from 'fs';
+import path from "path";
+import { fetchFileById } from "../services/fileService.js";
 import { proccessFileAnalysisAndSave } from "../services/analysisService.js";
 
 /**
  * POST /analysis
- * Recibe la ruta del archivo (local) y el id del registro en DB
+ * Recibe el id del registro en DB
  */
 export const analyzeFile = async (req, res) => {
   try {
-    const { filePath, dbFileId } = req.body;
+    const { dbFileId } = req.body;
 
-    if (!filePath || !dbFileId) {
-      return res.status(400).json({ error: "Se requiere filePath y dbFileId" });
+    if (!dbFileId) {
+      return res.status(400).json({ error: "Se requiere dbFileId" });
     }
 
-    const analysisResult = await proccessFileAnalysisAndSave(filePath, dbFileId);
+    // Buscar archivo en BD
+    const fileRecord = await fetchFileById(dbFileId);
+    if (!fileRecord) {
+      return res.status(404).json({ error: "Archivo no encontrado" });
+    }
 
-    return res.status(201).json(analysisResult);
+    
+    // Construir ruta absoluta desde la relativa guardada en BD
+    const absolutePath = path.join(process.cwd(), "src", file.file_path);
+    if (!fs.existsSync(absolutePath)) {
+      return res.status(404).json({ error: "El archivo no está disponible en la carpeta" });
+    }
+
+    // Procesar con IA
+    const aiResult = await proccessFileAnalysisAndSave(absolutePath, dbFileId);
+
+    return res.status(201).json({
+      success: true,
+      analysis_id: aiResult.analysis_id,
+      result: aiResult,
+      file: fileRecord
+    });
+
   } catch (error) {
     console.error(" Error en analyzeFile:", error);
     return res.status(500).json({ error: "Error interno del servidor" });
