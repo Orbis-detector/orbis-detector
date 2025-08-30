@@ -1,64 +1,7 @@
-
-// Select all table rows inside <tbody>
-document.querySelectorAll("tbody tr").forEach((row) => {
-  // Add an event listener when the row is clicked
-  row.addEventListener("click", () => {
-    // Get the values from each column of the row
-    const coderName = row.children[0]?.innerText;      
-    const trainingName = row.children[1]?.innerText;   
-    const hasAI = row.children[2]?.innerText;          
-
-    // Get DOM elements where the info will be displayed
-    const popup = document.getElementById("popup"); 
-    const aiDetected = document.getElementById("ia_percentage"); 
-    const aiApi = document.getElementById("ai-comment");           
-
-    // If all elements exist, update their values and show the popup
-    if (aiDetected && aiApi && popup) {
-      aiDetected.innerText = hasAI === "Yes" ? "92%" : "5%"; 
-      aiApi.innerText = hasAI === "Yes" ? "OpenAI GPT-4" : "No AI detected"; 
-      popup.style.display = "flex"; 
-    }
-  });
-});
-
-// Get the close button
-const closeBtn = document.getElementById("close");
-if (closeBtn) {
-  // When the close button is clicked, hide the popup
-  closeBtn.addEventListener("click", () => {
-    const popup = document.getElementById("popup");
-    if (popup) popup.style.display = "none"; 
-  });
-}
-
-// Get feedback elements and buttons
-const feedback = document.getElementById("feedback"); // Textarea for comments
-const btnDelete = document.getElementById("delete"); // Delete button
-const btnSave = document.getElementById("save");     // Save button
-
-// Only add functionality if all elements exist
-if (feedback && btnDelete && btnSave) {
-  // Delete button: clears the textarea
-  btnDelete.addEventListener("click", () => {
-    feedback.value = "";
-  });
-
-  // Save button: saves feedback in localStorage
-  btnSave.addEventListener("click", () => {
-    const text = feedback.value.trim(); // Remove extra spaces
-    if (text) {
-      console.log("Feedback saved:", text);
-      localStorage.setItem("feedback", text); 
-      alert("Feedback saved successfully"); 
-    } else {
-      alert("No feedback to save"); 
-    }
-  });
-}
-
+// =============================================================
 // Capture form info and send it to the backend
 // References to form elements
+// =============================================================
 const inputCoderName = document.getElementById("coderName");
 const inputDeliveryName = document.getElementById("deliveryName");
 const fileInput = document.getElementById("fileInput");
@@ -81,7 +24,7 @@ if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
 
     try {
       // Send data to the backend
-      const response = await fetch("http://localhost:3000/api/files/upload", {
+      const response = await fetch("http://localhost:3002/api/files/upload", {
         method: "POST",
         body: formData,
       });
@@ -104,3 +47,145 @@ if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
   });
 };
 
+// =============================================================
+// FETCH Y PINTADO DE LA TABLA (sin tocar endpoints existentes)
+// =============================================================
+const tableBody = document.getElementById("submissionBody");
+const popup = document.getElementById("popup");
+const closeBtn = document.getElementById("close");
+
+// Elementos del popup (ids según tu HTML)
+const iaPercentageEl = document.getElementById("ia_percentage");
+const aiCommentEl = document.getElementById("ai-comment");
+const feedbackEl = document.getElementById("feedback");
+const saveBtn = document.getElementById("save");   // botón Guardar
+const deleteBtn = document.getElementById("delete"); // botón Borrar
+
+// Guardamos el analysis_id actual para las operaciones de feedback
+let currentAnalysisId = null;
+
+// Escapa texto simple para evitar XSS si viene de DB (mejor práctica)
+function escapeHtml(str = "") {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// =============================================================
+// CARGAR SUBMISSIONS EN LA TABLA (usa tu endpoint actual)
+// =============================================================
+async function loadSubmissions() {
+  try {
+    const res = await fetch("http://localhost:3002/getAnalysis");
+    if (!res.ok) throw new Error("Error al cargar los datos");
+
+    const data = await res.json();
+
+    // Limpia la tabla
+    tableBody.innerHTML = "";
+
+    // Inserta cada fila (usamos submission_id como venías haciendo)
+    data.forEach((item) => {
+      const row = document.createElement("tr");
+      row.setAttribute("data-id", item.submission_id); // si necesitas más adelante
+
+      row.innerHTML = `
+        <td>${escapeHtml(item.name_coder)}</td>
+        <td>${escapeHtml(item.name_training)}</td>
+        <td>${item.ia_detected === 1 ? "Yes" : "No"}</td>
+      `;
+
+      // Evento click → abrir popup con más info
+      row.addEventListener("click", () => openPopup(item.submission_id));
+
+      tableBody.appendChild(row);
+    });
+  } catch (error) {
+    console.error("Error al cargar submissions:", error);
+    // no rompo la UX, solo aviso en consola y opcionalmente puedes alertar:
+    // alert("No se pudieron cargar las entregas. Revisa el servidor.");
+  }
+}
+
+// =============================================================
+// POPUP: abrir con detalle (usa tu endpoint actual de detalle)
+// =============================================================
+async function openPopup(submissionId) {
+  try {
+    const res = await fetch(`http://localhost:3002/getAnalysis/${submissionId}`);
+    if (!res.ok) throw new Error("Error al cargar análisis");
+
+    const data = await res.json();
+
+    // La API a veces devuelve array (rows) o un objeto. Normalizamos.
+    const analysis = Array.isArray(data) ? data[0] : data;
+    if (!analysis) throw new Error("No se encontró análisis");
+
+    // Guardamos el analysis_id real si viene (necesario para feedback)
+    // Si no viene, fallback al submissionId (si tu backend lo maneja)
+    currentAnalysisId = analysis.analysis_id ?? submissionId;
+
+    // Pintar en el popup (defensivo)
+    iaPercentageEl.textContent = `${analysis.ia_percentage ?? 0}%`;
+    aiCommentEl.textContent = analysis.explanation ?? "No explanation available";
+    feedbackEl.value = analysis.comment ?? "";
+
+    // Mostrar popup
+    popup.style.display = "flex";
+  } catch (error) {
+    console.error("Error al abrir popup:", error);
+    alert("No se pudo cargar el análisis");
+  }
+}
+
+// Cerrar popup
+if (closeBtn) {
+  closeBtn.addEventListener("click", () => {
+    popup.style.display = "none";
+    currentAnalysisId = null;
+  });
+}
+
+// =============================================================
+// FEEDBACK: Guardar / Actualizar
+// =============================================================
+if (saveBtn) {
+  saveBtn.addEventListener("click", async () => {
+    if (!currentAnalysisId) return alert("No hay análisis seleccionado");
+
+    const comment = feedbackEl.value.trim();
+
+    // (opcional) Validación mínima
+    // if (!comment) return alert("El feedback está vacío");
+
+    try {
+      const res = await fetch(
+        `http://localhost:3002/feedback/${currentAnalysisId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ comment }),
+        }
+      );
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || result.message || "Error");
+
+      alert(result.message ?? "Feedback guardado correctamente");
+
+      // refrescar tabla para reflejar cambios si aplica
+      await loadSubmissions();
+    } catch (err) {
+      console.error("Error guardando feedback:", err);
+      alert("Error al guardar feedback");
+    }
+  });
+}
+
+// =============================================================
+// INICIO
+// =============================================================
+document.addEventListener("DOMContentLoaded", loadSubmissions);
