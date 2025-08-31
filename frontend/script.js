@@ -1,29 +1,28 @@
 // =============================================================
-// Capture form info and send it to the backend
-// References to form elements
+// Handle form input and send file to backend
 // =============================================================
 const inputCoderName = document.getElementById("coderName");
 const inputDeliveryName = document.getElementById("deliveryName");
 const fileInput = document.getElementById("fileInput");
 const submitBtn = document.querySelector(".primary-btn");
 
-// Only if the button exists (avoids error in deliveryHistory.html)
+// Add event listener only if button and inputs exist
 if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
   submitBtn.addEventListener("click", async () => {
-    // Validation
+    // Validate fields
     if (!inputCoderName.value || !inputDeliveryName.value || !fileInput.files.length) {
       alert("Please fill in all fields and select a file");
       return;
     }
 
-    // Create FormData object
+    // Prepare FormData for upload
     const formData = new FormData();
     formData.append("coderName", inputCoderName.value);
     formData.append("trainingName", inputDeliveryName.value);
     formData.append("file", fileInput.files[0]);
 
     try {
-      // Send data to the backend
+      // Send form data to backend
       const response = await fetch("http://localhost:3002/api/files/upload", {
         method: "POST",
         body: formData,
@@ -33,7 +32,7 @@ if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
 
       if (response.ok) {
         alert("File uploaded successfully");
-        // Reset form
+        // Reset inputs
         inputCoderName.value = "";
         inputDeliveryName.value = "";
         fileInput.value = "";
@@ -48,23 +47,22 @@ if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
 };
 
 // =============================================================
-// FETCH Y PINTADO DE LA TABLA (sin tocar endpoints existentes)
+// Table fetch and render logic
 // =============================================================
 const tableBody = document.getElementById("submissionBody");
 const popup = document.getElementById("popup");
 const closeBtn = document.getElementById("close");
 
-// Elementos del popup (ids según tu HTML)
+// Popup elements
 const iaPercentageEl = document.getElementById("ia_percentage");
 const aiCommentEl = document.getElementById("ai-comment");
 const feedbackEl = document.getElementById("feedback");
-const saveBtn = document.getElementById("save");   // botón Guardar
-const deleteBtn = document.getElementById("delete"); // botón Borrar
+const saveBtn = document.getElementById("save");
+const deleteBtn = document.getElementById("delete");
 
-// Guardamos el analysis_id actual para las operaciones de feedback
 let currentAnalysisId = null;
 
-// Escapa texto simple para evitar XSS si viene de DB (mejor práctica)
+// Escape HTML to prevent XSS
 function escapeHtml(str = "") {
   return String(str)
     .replace(/&/g, "&amp;")
@@ -74,23 +72,18 @@ function escapeHtml(str = "") {
     .replace(/'/g, "&#039;");
 }
 
-// =============================================================
-// CARGAR SUBMISSIONS EN LA TABLA (usa tu endpoint actual)
-// =============================================================
+// Load submissions into table
 async function loadSubmissions() {
   try {
     const res = await fetch("http://localhost:3002/getAnalysis");
-    if (!res.ok) throw new Error("Error al cargar los datos");
+    if (!res.ok) throw new Error("Error loading data");
 
     const data = await res.json();
-
-    // Limpia la tabla
     tableBody.innerHTML = "";
 
-    // Inserta cada fila (usamos submission_id como venías haciendo)
     data.forEach((item) => {
       const row = document.createElement("tr");
-      row.setAttribute("data-id", item.submission_id); // si necesitas más adelante
+      row.setAttribute("data-id", item.submission_id);
 
       row.innerHTML = `
         <td>${escapeHtml(item.name_coder)}</td>
@@ -98,50 +91,40 @@ async function loadSubmissions() {
         <td>${item.ia_detected === 1 ? "Yes" : "No"}</td>
       `;
 
-      // Evento click → abrir popup con más info
+      // Click row to open popup with details
       row.addEventListener("click", () => openPopup(item.submission_id));
-
       tableBody.appendChild(row);
     });
   } catch (error) {
-    console.error("Error al cargar submissions:", error);
-    // no rompo la UX, solo aviso en consola y opcionalmente puedes alertar:
-    // alert("No se pudieron cargar las entregas. Revisa el servidor.");
+    console.error("Error loading submissions:", error);
   }
 }
 
-// =============================================================
-// POPUP: abrir con detalle (usa tu endpoint actual de detalle)
-// =============================================================
+// Open popup with analysis details
 async function openPopup(submissionId) {
   try {
     const res = await fetch(`http://localhost:3002/getAnalysis/${submissionId}`);
-    if (!res.ok) throw new Error("Error al cargar análisis");
+    if (!res.ok) throw new Error("Error loading analysis");
 
     const data = await res.json();
-
-    // La API a veces devuelve array (rows) o un objeto. Normalizamos.
     const analysis = Array.isArray(data) ? data[0] : data;
-    if (!analysis) throw new Error("No se encontró análisis");
+    if (!analysis) throw new Error("Analysis not found");
 
-    // Guardamos el analysis_id real si viene (necesario para feedback)
-    // Si no viene, fallback al submissionId (si tu backend lo maneja)
     currentAnalysisId = analysis.analysis_id ?? submissionId;
 
-    // Pintar en el popup (defensivo)
+    // Populate popup fields
     iaPercentageEl.textContent = `${analysis.ia_percentage ?? 0}%`;
     aiCommentEl.textContent = analysis.explanation ?? "No explanation available";
     feedbackEl.value = analysis.comment ?? "";
 
-    // Mostrar popup
     popup.style.display = "flex";
   } catch (error) {
-    console.error("Error al abrir popup:", error);
-    alert("No se pudo cargar el análisis");
+    console.error("Error opening popup:", error);
+    alert("Could not load analysis");
   }
 }
 
-// Cerrar popup
+// Close popup
 if (closeBtn) {
   closeBtn.addEventListener("click", () => {
     popup.style.display = "none";
@@ -150,42 +133,32 @@ if (closeBtn) {
 }
 
 // =============================================================
-// FEEDBACK: Guardar / Actualizar
+// Feedback save/update
 // =============================================================
 if (saveBtn) {
   saveBtn.addEventListener("click", async () => {
-    if (!currentAnalysisId) return alert("No hay análisis seleccionado");
+    if (!currentAnalysisId) return alert("No analysis selected");
 
     const comment = feedbackEl.value.trim();
 
-    // (opcional) Validación mínima
-    // if (!comment) return alert("El feedback está vacío");
-
     try {
-      const res = await fetch(
-        `http://localhost:3002/feedback/${currentAnalysisId}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ comment }),
-        }
-      );
+      const res = await fetch(`http://localhost:3002/feedback/${currentAnalysisId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comment }),
+      });
 
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || result.message || "Error");
 
-      alert(result.message ?? "Feedback guardado correctamente");
-
-      // refrescar tabla para reflejar cambios si aplica
-      await loadSubmissions();
+      alert(result.message ?? "Feedback saved successfully");
+      await loadSubmissions(); // Refresh table
     } catch (err) {
-      console.error("Error guardando feedback:", err);
-      alert("Error al guardar feedback");
+      console.error("Error saving feedback:", err);
+      alert("Error saving feedback");
     }
   });
 }
 
-// =============================================================
-// INICIO
-// =============================================================
+// Initialize table on DOM load
 document.addEventListener("DOMContentLoaded", loadSubmissions);

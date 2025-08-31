@@ -3,7 +3,7 @@ import { analyzeFile } from "../controllers/analysisController.js";
 
 const router = Router();
 
-// POST /analysis
+// Defines POST /analysis route to handle file analysis requests
 router.post("/", analyzeFile);
 
 export default router;

@@ -3,10 +3,8 @@ import path from "path";
 import { fetchFileById } from "../services/fileService.js";
 import { proccessFileAnalysisAndSave } from "../services/analysisService.js";
 
-/**
- * POST /analysis
- * Recibe el id del registro en DB
- */
+// Handles POST /analysis: validates input, fetches file, checks path, 
+// processes AI analysis, and returns results
 export const analyzeFile = async (req, res) => {
   try {
     const { dbFileId } = req.body;
@@ -15,20 +13,20 @@ export const analyzeFile = async (req, res) => {
       return res.status(400).json({ error: "Se requiere dbFileId" });
     }
 
-    // Buscar archivo en BD
+    // Fetch file from DB by ID and return 404 if not found
     const fileRecord = await fetchFileById(dbFileId);
     if (!fileRecord) {
       return res.status(404).json({ error: "Archivo no encontrado" });
     }
 
     
-    // Construir ruta absoluta desde la relativa guardada en BD
+    // Build absolute path from DB-stored relative path and check file existence
     const absolutePath = path.join(process.cwd(), "src", file.file_path);
     if (!fs.existsSync(absolutePath)) {
       return res.status(404).json({ error: "El archivo no está disponible en la carpeta" });
     }
 
-    // Procesar con IA
+    // Process with AI
     const aiResult = await proccessFileAnalysisAndSave(absolutePath, dbFileId);
 
     return res.status(201).json({

@@ -1,39 +1,35 @@
 import path from "path";
 import { createFile, getFileById } from "../models/File.js";
 
-// Procesa y guarda un archivo en la BD
+// Processes an uploaded file: validates input, saves relative path in DB, and returns file info
 export const processUploadFile = async (coderName, trainingName, file) => {
-    // Validar que exista un archivo
-    if (!file) throw new Error("No se subió ningún archivo");
+    if (!file) throw new Error("No file uploaded");
     if (!coderName || !trainingName) {
-        throw new Error("coderName y trainingName son requeridos");
+        throw new Error("coderName and trainingName are required");
     }
 
-    //  Guardar SOLO la ruta relativa en DB (portable entre entornos)
-    // Usamos path.posix para asegurar "/" en la URL sin importar SO
+    // Store only the relative path in DB (portable across environments)
     const relativePath = path.posix.join("uploads", file.filename);
 
-    // Guardar en la base de datos (Submissions) y obtener el ID generado
+    // Save file record in Submissions table and get generated ID
     const fileId = await createFile(coderName, trainingName, relativePath);
 
-
-    // Retornar un objeto con toda la información relevante
+    // Return relevant file information
     return {
-        file_id: fileId, // ID del archivo en DB
-        coder_name: coderName, // Nombre del programador
-        training_name: trainingName, // Nombre del entrenamiento
-        original_name: file.originalname, // Nombre original del archivo subido
-        file_path: relativePath, // Ruta en el servidor relativa
+        file_id: fileId,
+        coder_name: coderName,
+        training_name: trainingName,
+        original_name: file.originalname,
+        file_path: relativePath,
     };
 };
 
-// Obtener archivo desde la BD por su ID
+// Retrieves a file from the DB by its ID, throws error if not found
 export const fetchFileById = async (fileId) => {
     const file = await getFileById(fileId);
 
-    // Si no existe, lanzar error
     if (!file) {
-        throw new Error(`Archivo con ID ${fileId} no encontrado`);
+        throw new Error(`File with ID ${fileId} not found`);
     }
 
     return file;

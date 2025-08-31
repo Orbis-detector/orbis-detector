@@ -1,29 +1,26 @@
 import mysql from 'mysql2/promise'
 import dotenv from 'dotenv'
-
 dotenv.config();
 
+// Database connection pool with environment-based configuration
 const pool = mysql.createPool(
     {
         host: process.env.DB_HOST || 'localhost',
-        //puede estallar por el mismo puerto cuidado!
         port: process.env.DB_PORT || 3306,
         user: process.env.DB_USER || '',
         password: process.env.DB_PASSWORD || '',
         database: process.env.DB_NAME || 'defaultdb',
         ssl: process.env.DB_SSL_MODE === 'REQUIRED' ? { rejectUnauthorized: true } : undefined,
-
-        //configuracion del pool
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0,
     }
 );
 
-//export principal
+// Export the MySQL connection pool
 export default pool;
 
-//Debugging
+// Function to test MySQL connection, logs status and returns success flag
 export const testConnection = async () => {
   try {
     const connection = await pool.getConnection();

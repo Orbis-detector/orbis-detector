@@ -18,39 +18,39 @@ import feedbacksRoutes from "./src/routes/feedbacksRoutes.js";
 dotenv.config();
 
 const app = express();
-// Probar conexión a la base de datos al iniciar
+
+// Test database connection on startup
 testConnection();
 
-// Middleware para que entienda JSON
+// Middleware for parsing JSON and URL-encoded data
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rutas
+// Routes
 app.use("/analysis", analysisRoutes);
-// Prefijo de las rutas de archivos
+// Prefix for file routes
 app.use("/api/files", fileRoutes);
-// Servir la carpeta "uploads" como estática
-// Así cualquier archivo en /uploads se podrá acceder desde http://localhost:3002/uploads/<nombre>
+// Serve "uploads" folder as static for direct access
 app.use("uploads", express.static(path.join(process.cwd(), "uploads")));
-// Feedbacks
+// Feedback routes
 app.use("/api/feedbacks", feedbacksRoutes);
 
-//control de eventos que se ejecuta despues de subir un archivo correctamente
+// Event listener executed after a file is successfully uploaded
 eventBus.on(EVENTS.FILE_UPLOADED, async (file) => {
   try {
-    console.log("Objeto recibido en listener:", file);
+    console.log("Received object in listener:", file);
     const absolutePath = path.join(process.cwd(), "src", file.file_path);
     await proccessFileAnalysisAndSave(absolutePath, file.file_id);
-    console.log(`Análisis ejecutado para archivo ${file.file_id}`);
+    console.log(`Analysis executed for file ${file.file_id}`);
   } catch (error) {
-    console.error("Error en análisis automático:", error);
+    console.error("Error in automatic analysis:", error);
   }
 });
 
-/* EndPoint que consumen la db */
+/* Endpoints consuming the database */
 
-// Trae todos los análisis para la tabla
+// Retrieves all analyses for the table
 app.get("/getAnalysis", async (req, res) => {
   try { 
     const query = `
@@ -64,12 +64,12 @@ app.get("/getAnalysis", async (req, res) => {
 
     res.json(rows);
   } catch (err) {
-    console.error("Error en DB:", err);
-    res.status(500).json({ error: "Error en DB" });
+    console.error("Database error:", err);
+    res.status(500).json({ error: "Database error" });
   }
 });
 
-// Trae todos los datos de un análisis específico para el popup
+// Retrieves all details for a specific analysis for the popup
 app.get("/getAnalysis/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -91,50 +91,50 @@ app.get("/getAnalysis/:id", async (req, res) => {
 
     res.json(rows);
   } catch (err) {
-    console.error("Error en DB:", err);
-    res.status(500).json({ error: "Error en DB" });
+    console.error("Database error:", err);
+    res.status(500).json({ error: "Database error" });
   }
 });
 
-// Guardar o actualizar feedback
+// Save or update feedback for an analysis
 app.post("/feedback/:analysisId", async (req, res) => {
   const { analysisId } = req.params;
   const { comment } = req.body;
 
   try {
-    // Verificar si ya existe feedback para este análisis
+    // Check if feedback already exists for this analysis
     const [existing] = await db.query(
       "SELECT feedback_id FROM Feedbacks WHERE analysis_id = ?",
       [analysisId]
     );
 
     if (existing.length > 0) {
-      // Actualizar
+      // Update existing feedback
       await db.query(
         "UPDATE Feedbacks SET comment = ? WHERE analysis_id = ?",
         [comment, analysisId]
       );
-      return res.json({ message: "Feedback actualizado" });
+      return res.json({ message: "Feedback updated" });
     } else {
-      // Insertar
+      // Insert new feedback
       await db.query(
         "INSERT INTO Feedbacks (analysis_id, comment) VALUES (?, ?)",
         [analysisId, comment]
       );
-      return res.json({ message: "Feedback guardado" });
+      return res.json({ message: "Feedback saved" });
     }
   } catch (err) {
-    console.error("Error guardando feedback:", err);
-    res.status(500).json({ error: "Error guardando feedback" });
+    console.error("Error saving feedback:", err);
+    res.status(500).json({ error: "Error saving feedback" });
   }
 });
 
-// Puerto y levante
+// Start server on defined port
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, (error) => {
   if (error) {
-    console.error("Error al iniciar el servidor:", error);
+    console.error("Server startup error:", error);
   } else {
-    console.log(`Servidor corriendo en el puerto: ${PORT}`);
+    console.log(`Server running on port: ${PORT}`);
   }
 });

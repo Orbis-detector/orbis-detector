@@ -9,17 +9,17 @@
 </head>
 
 <body>
-    <!-- Header -->
+    <!-- Header section with logo and decorative dot -->
     <header class="top-header">
         <div class="brand-box">
-            <img src="./images/logo_riwi.png" alt="Logo de Riwi">
+            <img src="./images/logo_riwi.png" alt="Riwi Logo">
         </div>
         <div class="header-dot"></div>
     </header>
 
-    <!-- Main Layout -->
+    <!-- Main layout with sidebar and content -->
     <div class="app">
-        <!-- Sidebar -->
+        <!-- Sidebar navigation -->
         <aside class="sidebar">
             <nav class="menu">
                 <a href="index.html" class="menu-item">Make a Delivery</a>
@@ -27,7 +27,7 @@
             </nav>
         </aside>
 
-        <!-- Main -->
+        <!-- Main content area -->
         <main class="main">
             <h2 class="page-title">Select module and week to filter files</h2>
 
@@ -36,6 +36,7 @@
                     Orbis Detector
                 </header>
 
+                <!-- Filters for module and week -->
                 <div class="filters">
                     <div class="filter-box">
                         <label for="module">Module</label>
@@ -55,9 +56,11 @@
                         </select>
                     </div>
 
+                    <!-- Filter action button -->
                     <button class="primary-btn">Search</button>
                 </div>
 
+                <!-- Table container to display submissions -->
                 <div class="table-container">
                     <table id="submissionTable" class="table table-hover">
                         <thead>
@@ -68,7 +71,7 @@
                             </tr>
                         </thead>
                         <tbody id="submissionBody">
-                            <!-- Here the data will be filled dynamically -->
+                            <!-- Table rows filled dynamically via JS -->
                         </tbody>
                     </table>
                 </div>
@@ -76,12 +79,12 @@
         </main>
     </div>
 
-    <!-- POPUP MODAL -->
+    <!-- Popup modal to show analysis and feedback -->
     <div id="popup" class="popup-overlay" style="display:none;">
         <div class="popup-content">
             <h2>AI Analysis Results</h2>
 
-            <!-- Results Section -->
+            <!-- Results display -->
             <div class="results">
                 <div class="result-box">
                     <p><strong>% AI Detected</strong></p>
@@ -93,12 +96,13 @@
                 </div>
             </div>
 
-            <!-- Feedback Section -->
+            <!-- Feedback section for teacher -->
             <div class="feedback-box">
                 <p><strong>Feedback area for the teacher</strong></p>
                 <textarea id="feedback" placeholder="Write your comments..."></textarea>
             </div>
 
+            <!-- Buttons to save feedback or close popup -->
             <div class="popup-buttons">
                 <button class="btn" id="save">Save Feedback</button>
                 <button class="btn" id="close">Close</button>
@@ -106,6 +110,7 @@
         </div>
     </div>
 
+    <!-- Script to handle table and popup functionality -->
     <script src="script.js" type="module"></script>
 </body>
 
