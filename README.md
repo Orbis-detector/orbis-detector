@@ -39,7 +39,7 @@ The goal is to support academic evaluation by highlighting potential AI-assisted
 
 ## 📁 Project Structure
 
-```
+```cd
 orbis-detector/
 │
 ├── Orbis_DocumentoTecnico.pdf
