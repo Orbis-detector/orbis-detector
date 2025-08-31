@@ -30,11 +30,13 @@ PORT=4000
 ### 3. Run the Server
 
 For development (with auto-reload):
+
 ```bash
 npx nodemon server.js
 ```
 
 For production:
+
 ```bash
 node server.js
 ```
@@ -43,7 +45,7 @@ node server.js
 
 ## 🗂️ Folder Structure
 
-```
+```cd
 backend/
 │
 ├── src/

@@ -1,3 +1,7 @@
+import { File as NodeFile } from 'node:buffer';
+if (!globalThis.File) {
+  globalThis.File = NodeFile;
+}
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
