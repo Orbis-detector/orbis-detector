@@ -24,7 +24,7 @@ ENV NODE_ENV=production
 ENV PORT=3002
 
 # Exponer el puerto
-EXPOSE 3002
+EXPOSE 8080
 
 # Comando para iniciar el servidor
 CMD ["node", "server.js"]

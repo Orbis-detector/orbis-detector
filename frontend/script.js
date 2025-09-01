@@ -3,7 +3,7 @@
 // =============================================================
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:3002' 
-  : 'https://tu-backend-en-render.com'; // Reemplaza con tu URL de producción
+  : 'https://orbis-backend-1094944094478.us-central1.run.app'; // Reemplaza con tu URL de producción
 
 // =============================================================
 // Capture form info and send it to the backend
