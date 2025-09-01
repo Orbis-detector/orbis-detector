@@ -1,5 +1,14 @@
 // =============================================================
-// Handle form input and send file to backend
+
+// Configuración de la API
+// =============================================================
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3002' 
+  : 'https://orbis-backend-1094944094478.us-central1.run.app'; // Reemplaza con tu URL de producción
+
+// =============================================================
+// Capture form info and send it to the backend
+// References to form elements
 // =============================================================
 const inputCoderName = document.getElementById("coderName");
 const inputDeliveryName = document.getElementById("deliveryName");
@@ -22,8 +31,9 @@ if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
     formData.append("file", fileInput.files[0]);
 
     try {
-      // Send form data to backend
-      const response = await fetch("http://localhost:3002/api/files/upload", {
+
+      // Send data to the backend
+      const response = await fetch(`${API_BASE_URL}/api/files/upload`, {
         method: "POST",
         body: formData,
       });
@@ -75,8 +85,8 @@ function escapeHtml(str = "") {
 // Load submissions into table
 async function loadSubmissions() {
   try {
-    const res = await fetch("http://localhost:3002/getAnalysis");
-    if (!res.ok) throw new Error("Error loading data");
+    const res = await fetch(`${API_BASE_URL}/getAnalysis`);
+    if (!res.ok) throw new Error("Error al cargar los datos");
 
     const data = await res.json();
     tableBody.innerHTML = "";
@@ -103,8 +113,8 @@ async function loadSubmissions() {
 // Open popup with analysis details
 async function openPopup(submissionId) {
   try {
-    const res = await fetch(`http://localhost:3002/getAnalysis/${submissionId}`);
-    if (!res.ok) throw new Error("Error loading analysis");
+    const res = await fetch(`${API_BASE_URL}/getAnalysis/${submissionId}`);
+    if (!res.ok) throw new Error("Error al cargar análisis");
 
     const data = await res.json();
     const analysis = Array.isArray(data) ? data[0] : data;
@@ -142,11 +152,15 @@ if (saveBtn) {
     const comment = feedbackEl.value.trim();
 
     try {
-      const res = await fetch(`http://localhost:3002/feedback/${currentAnalysisId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ comment }),
-      });
+      const res = await fetch(
+        `${API_BASE_URL}/feedback/${currentAnalysisId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ comment }),
+        }
+      );
+
 
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || result.message || "Error");
