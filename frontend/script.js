@@ -1,4 +1,11 @@
 // =============================================================
+// Configuración de la API
+// =============================================================
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3002' 
+  : 'https://tu-backend-en-render.com'; // Reemplaza con tu URL de producción
+
+// =============================================================
 // Capture form info and send it to the backend
 // References to form elements
 // =============================================================
@@ -24,7 +31,7 @@ if (submitBtn && inputCoderName && inputDeliveryName && fileInput) {
 
     try {
       // Send data to the backend
-      const response = await fetch("http://localhost:3002/api/files/upload", {
+      const response = await fetch(`${API_BASE_URL}/api/files/upload`, {
         method: "POST",
         body: formData,
       });
@@ -79,7 +86,7 @@ function escapeHtml(str = "") {
 // =============================================================
 async function loadSubmissions() {
   try {
-    const res = await fetch("http://localhost:3002/getAnalysis");
+    const res = await fetch(`${API_BASE_URL}/getAnalysis`);
     if (!res.ok) throw new Error("Error al cargar los datos");
 
     const data = await res.json();
@@ -115,7 +122,7 @@ async function loadSubmissions() {
 // =============================================================
 async function openPopup(submissionId) {
   try {
-    const res = await fetch(`http://localhost:3002/getAnalysis/${submissionId}`);
+    const res = await fetch(`${API_BASE_URL}/getAnalysis/${submissionId}`);
     if (!res.ok) throw new Error("Error al cargar análisis");
 
     const data = await res.json();
@@ -163,7 +170,7 @@ if (saveBtn) {
 
     try {
       const res = await fetch(
-        `http://localhost:3002/feedback/${currentAnalysisId}`,
+        `${API_BASE_URL}/feedback/${currentAnalysisId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

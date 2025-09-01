@@ -21,7 +21,7 @@ const app = express();
 // Probar conexión a la base de datos al iniciar
 testConnection();
 
-// Middleware para que entienda JSON
+// Configuración básica de CORS
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -47,6 +47,8 @@ eventBus.on(EVENTS.FILE_UPLOADED, async (file) => {
     console.error("Error en análisis automático:", error);
   }
 });
+
+// app.use(express.static(path.join(process.cwd(), "frontend")));
 
 /* EndPoint que consumen la db */
 
@@ -129,12 +131,22 @@ app.post("/feedback/:analysisId", async (req, res) => {
   }
 });
 
+// Servir archivos estáticos del frontend
+const frontendPath = path.join(process.cwd(), '..', 'frontend');
+app.use(express.static(frontendPath));
+
+// Ruta raíz para servir el index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
 // Puerto y levante
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, (error) => {
   if (error) {
     console.error("Error al iniciar el servidor:", error);
   } else {
     console.log(`Servidor corriendo en el puerto: ${PORT}`);
+    console.log(`Frontend disponible en: http://localhost:${PORT}`);
   }
 });
