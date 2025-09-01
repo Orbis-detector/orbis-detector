@@ -1,5 +1,5 @@
-// Prompt usado para analizar si un texto fue generado por IA.
-// Devuelve un JSON con: porcentaje, booleano de detección y explicación corta.
+// Prompt to check if a text was AI-generated. Returns JSON with percentage,
+// detection flag, and short explanation.
 export const ANALYSIS_PROMPT = `
 Actúa como experto detector de contenido generado por IA. Analiza el archivo adjunto.
 

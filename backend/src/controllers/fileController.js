@@ -1,12 +1,11 @@
 import { processUploadFile, fetchFileById } from "../services/fileService.js";
 import eventBus, { EVENTS } from '../events.js'
 
-// Controlador para subir un archivo
+// Handles file upload, processes it, emits FILE_UPLOADED event, and returns response
 export const uploadFile = async (req, res) => {
   try {
     const { coderName, trainingName } = req.body;
 
-    // Llamada al service
     const result = await processUploadFile(coderName, trainingName, req.file);
 
     console.log("Objeto emitido en evento FILE_UPLOADED:", result);
@@ -18,11 +17,11 @@ export const uploadFile = async (req, res) => {
     });
   } catch (error) {
     console.error("Error en uploadFile:", error);
-    return res.status(500).json({ error: "Error interno del servidor" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
-// Controlador para obtener un archivo por su ID
+// Fetches a file by its ID and returns it in the response
 export const getFile = async (req, res) => {
   try {
     const { id } = req.params;

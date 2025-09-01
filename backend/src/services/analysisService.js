@@ -11,13 +11,14 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+// Uploads a local file to OpenAI and returns the file ID
 export const uploadFileToOpenAI = async (filePath) => {
 
   if (!fs.existsSync(filePath)) {
-    throw new Error(`Archivo no encontrado en ruta: ${filePath}`);
+    throw new Error(`File not found at path: ${filePath}`);
   }
 
-  const fileStream = fs.createReadStream(path.resolve(filePath)); // lo resuelve a una ruta absoluta y luego crea el stream o flujo de datos
+  const fileStream = fs.createReadStream(path.resolve(filePath)); // resolve to absolute path and create data stream
 
   const file = await openai.files.create({
     file: fileStream,
@@ -27,6 +28,7 @@ export const uploadFileToOpenAI = async (filePath) => {
   return file.id;
 };
 
+// Sends the uploaded file to GPT-5 model for analysis and returns parsed JSON
 export const analyseFileWithGPT = async (fileId) => {
     try {
         const response = await openai.responses.create({
@@ -53,24 +55,23 @@ export const analyseFileWithGPT = async (fileId) => {
         try {
             parsed = JSON.parse(response.output_text);
         } catch (parseErr) {
-        throw new Error("La IA no devolvió JSON válido");
+        throw new Error("AI did not return valid JSON");
         }
 
         return parsed;
     }
     catch (err) {
-        console.error("Error al analizar el archivo con GPT:", err);
+        console.error("Error analyzing file with GPT:", err);
         throw err;
     }
 };
 
+// Full pipeline: uploads file to OpenAI, analyzes it with GPT, and saves the result to the database
 export const proccessFileAnalysisAndSave = async (filePath, dbFileId) => {
     try {
-        // Logica
         const fileIdOpenAI = await uploadFileToOpenAI(filePath);
         const analysis = await analyseFileWithGPT(fileIdOpenAI);
 
-        //  Guardar
         const analysisId = await createAnalysis(
             dbFileId,
             analysis.ia_percentage,
@@ -84,7 +85,7 @@ export const proccessFileAnalysisAndSave = async (filePath, dbFileId) => {
             ...analysis
         };
     } catch (err) {
-        console.error("Error al procesar el análisis del archivo:", err);
+        console.error("Error processing file analysis:", err);
         throw err;
     }
 }

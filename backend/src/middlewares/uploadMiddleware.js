@@ -1,29 +1,26 @@
-// Librerías
+// Libraries for handling file uploads and paths
 import multer from "multer";
 import path from "path";
 
-// Ruta absoluta a la carpeta uploads
+// Absolute path to the uploads folder
 const uploadPath = path.join(process.cwd(), "src", "uploads");
 
-// Configuración de Multer para guardar archivos en disco
+// Multer configuration for saving files to disk
 const storage = multer.diskStorage({
-  // Carpeta destino donde se guardarán los archivos subidos
+  // Destination folder for uploaded files
   destination: (req, file, cb) => {
-    // cb = callback que usa Multer para definir dónde guardar
     cb(null, uploadPath);
   },
 
-  // Definir el nombre final con el que se guardará cada archivo
+  // Define final filename for each uploaded file
   filename: (req, file, cb) => {
-    // uniqueSuffix = marca de tiempo + número aleatorio
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    // El archivo conserva su extensión original (ej: .pdf, .jpg, etc.)
+    // Preserve original file extension
     cb(null, uniqueSuffix + path.extname(file.originalname));
   },
 });
 
-// Middleware de Multer listo para usarse en rutas
-// (ejemplo: upload.single("file"))
+// Multer middleware ready to use in routes (e.g., upload.single("file"))
 const upload = multer({ storage });
 
 export default upload;

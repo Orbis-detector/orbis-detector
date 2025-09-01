@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header section with logo and decorative dot -->
     <header class="top-header">
         <div class="brand-box">
             <!-- Cambiado a ruta relativa -->
@@ -18,8 +18,9 @@
         <div class="header-dot" aria-hidden="true"></div>
     </header>
 
-    <!-- Main container -->
+    <!-- Main container with sidebar and content -->
     <div class="app">
+        <!-- Sidebar navigation -->
         <aside class="sidebar">
             <nav class="menu">
                 <!-- Cambiado a ruta relativa -->
@@ -28,9 +29,11 @@
             </nav>
         </aside>
 
+        <!-- Main content area -->
         <main class="main">
             <section class="upload-card" aria-labelledby="upload-title">
                 <div class="upload-head">
+                    <!-- Buttons for view details and download (icons only) -->
                     <button class="icon-btn" aria-label="View details">📄</button>
                     <button class="icon-btn" aria-label="Download">⬇️</button>
                 </div>
@@ -38,11 +41,11 @@
                 <div class="upload-body">
                     <p id="upload-title" class="upload-title">UPLOAD A FILE</p>
 
-                    <!-- Inputs -->
+                    <!-- Text inputs for coder and delivery names -->
                     <input type="text" id="coderName" class="text-input" placeholder="Coder name">
                     <input type="text" id="deliveryName" class="text-input" placeholder="Delivery name">
 
-                    <!-- Upload zone -->
+                    <!-- Drag & drop file upload area -->
                     <label class="dropzone" for="fileInput" role="button" aria-label="Select file to upload">
                         <span class="dropzone-icon">⬇️</span>
                         <input id="fileInput" type="file" hidden />
@@ -50,10 +53,11 @@
                 </div>
             </section>
 
+            <!-- Button to add the delivery -->
             <button class="primary-btn">Add Delivery</button>
         </main>
     </div>
     <!-- Cambiado a ruta relativa y eliminado duplicado -->
-    <script src="script.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>

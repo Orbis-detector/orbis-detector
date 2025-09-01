@@ -4,11 +4,10 @@ import { uploadFile, getFile } from "../controllers/fileController.js";
 
 const router = express.Router();
 
-// Ruta POST /api/files/upload que va a subir archivo
-// Usa multer (upload.single) para procesar el archivo y luego pasa al controlador
+// POST /api/files/upload route: handles file uploads using multer, then calls controller
 router.post("/upload", upload.single("file"), uploadFile);
 
-// Ruta GET /api/files/:id para obtener archivo por ID
+// GET /api/files/:id route: retrieves a file by its ID
 router.get("/:id", getFile);
 
 export default router;
