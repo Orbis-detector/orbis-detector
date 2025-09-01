@@ -6,7 +6,7 @@
 //   ? 'http://localhost:3002' 
 //   : 'https://orbis-backend-1094944094478.us-central1.run.app'; // Reemplaza con tu URL de producción
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = 'https://orbis-backend-1094944094478.us-central1.run.app';
 
 // =============================================================
 // Capture form info and send it to the backend
