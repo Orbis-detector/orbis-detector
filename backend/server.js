@@ -18,25 +18,25 @@ import feedbacksRoutes from "./src/routes/feedbacksRoutes.js";
 dotenv.config();
 
 const app = express();
-// Probar conexión a la base de datos al iniciar
+// Test database connection on startup
 testConnection();
 
-// Configuración básica de CORS
+// Basic CORS configuration
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rutas
+// Routes
 app.use("/analysis", analysisRoutes);
-// Prefijo de las rutas de archivos
+// Prefix for file routes
 app.use("/api/files", fileRoutes);
-// Servir la carpeta "uploads" como estática
-// Así cualquier archivo en /uploads se podrá acceder desde http://localhost:3002/uploads/<nombre>
+// Serve the "uploads" folder as static
+// Any file in /uploads will be accessible from http://localhost:3002/uploads/<filename>
 app.use("uploads", express.static(path.join(process.cwd(), "uploads")));
 // Feedbacks
 app.use("/api/feedbacks", feedbacksRoutes);
 
-//control de eventos que se ejecuta despues de subir un archivo correctamente
+// Event control executed after a file is successfully uploaded
 eventBus.on(EVENTS.FILE_UPLOADED, async (file) => {
   try {
     console.log("Objeto recibido en listener:", file);
@@ -50,9 +50,9 @@ eventBus.on(EVENTS.FILE_UPLOADED, async (file) => {
 
 // app.use(express.static(path.join(process.cwd(), "frontend")));
 
-/* EndPoint que consumen la db */
+/* Endpoints that consume the database */
 
-// Trae todos los análisis para la tabla
+// Get all analyses for the table
 app.get("/getAnalysis", async (req, res) => {
   try { 
     const query = `
@@ -71,7 +71,7 @@ app.get("/getAnalysis", async (req, res) => {
   }
 });
 
-// Trae todos los datos de un análisis específico para el popup
+// Get all data for a specific analysis for the popup
 app.get("/getAnalysis/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -98,27 +98,27 @@ app.get("/getAnalysis/:id", async (req, res) => {
   }
 });
 
-// Guardar o actualizar feedback
+// Save or update feedback
 app.post("/feedback/:analysisId", async (req, res) => {
   const { analysisId } = req.params;
   const { comment } = req.body;
 
   try {
-    // Verificar si ya existe feedback para este análisis
+  // Check if feedback already exists for this analysis
     const [existing] = await db.query(
       "SELECT feedback_id FROM Feedbacks WHERE analysis_id = ?",
       [analysisId]
     );
 
     if (existing.length > 0) {
-      // Actualizar
+  // Update
       await db.query(
         "UPDATE Feedbacks SET comment = ? WHERE analysis_id = ?",
         [comment, analysisId]
       );
       return res.json({ message: "Feedback actualizado" });
     } else {
-      // Insertar
+  // Insert
       await db.query(
         "INSERT INTO Feedbacks (analysis_id, comment) VALUES (?, ?)",
         [analysisId, comment]
@@ -131,16 +131,16 @@ app.post("/feedback/:analysisId", async (req, res) => {
   }
 });
 
-// Servir archivos estáticos del frontend
+// Serve static frontend files
 const frontendPath = path.join(process.cwd(), '..', 'frontend');
 app.use(express.static(frontendPath));
 
-// Ruta raíz para servir el index.html
+// Root route to serve index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-// Puerto y levante
+// Port and server start
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, (error) => {
   if (error) {
