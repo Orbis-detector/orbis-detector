@@ -1,6 +1,6 @@
 # Backend
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Install Dependencies
 
@@ -29,21 +29,13 @@ PORT=4000
 
 ### 3. Run the Server
 
-For development (with auto-reload):
-
-```bash
-npx nodemon server.js
-```
-
-For production:
-
 ```bash
 node server.js
 ```
 
 ---
 
-## 🗂️ Folder Structure
+## Folder Structure
 
 ```cd
 backend/
@@ -67,14 +59,7 @@ backend/
 
 ---
 
-## 🛠️ Useful Scripts
-
-- `npm run lint` — Run ESLint for code quality.
-- `npm run prettier` — Format code with Prettier.
-
----
-
-## 🗄️ Database Tables (MVP)
+## Database Tables (MVP)
 
 ```sql
 CREATE TABLE Submissions (
@@ -117,7 +102,7 @@ CREATE TABLE Feedbacks (
 
 ### Dev Dependencies
 
-- nodemon
+- nodemon v18.19.1
 - eslint
 - prettier
 
@@ -130,5 +115,3 @@ CREATE TABLE Feedbacks (
 - Uploaded files are stored in `src/uploads/`.
 
 ---
-
-Let me know if you want to add instructions for the frontend or integration details!

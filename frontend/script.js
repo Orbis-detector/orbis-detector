@@ -1,11 +1,9 @@
 // =============================================================
-
-// Configuración de la API
+// API Configuration
 // =============================================================
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:3002' 
-  : 'https://orbis-backend-1094944094478.us-central1.run.app'; // Reemplaza con tu URL de producción
-
+  : 'https://orbis-backend-1094944094478.us-central1.run.app';
 // =============================================================
 // Capture form info and send it to the backend
 // References to form elements
@@ -68,7 +66,6 @@ const iaPercentageEl = document.getElementById("ia_percentage");
 const aiCommentEl = document.getElementById("ai-comment");
 const feedbackEl = document.getElementById("feedback");
 const saveBtn = document.getElementById("save");
-const deleteBtn = document.getElementById("delete");
 
 let currentAnalysisId = null;
 
@@ -80,7 +77,7 @@ function escapeHtml(str = "") {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
-}
+};
 
 // Load submissions into table
 async function loadSubmissions() {
@@ -108,7 +105,7 @@ async function loadSubmissions() {
   } catch (error) {
     console.error("Error loading submissions:", error);
   }
-}
+};
 
 // Open popup with analysis details
 async function openPopup(submissionId) {
@@ -132,7 +129,7 @@ async function openPopup(submissionId) {
     console.error("Error opening popup:", error);
     alert("Could not load analysis");
   }
-}
+};
 
 // Close popup
 if (closeBtn) {
@@ -140,7 +137,7 @@ if (closeBtn) {
     popup.style.display = "none";
     currentAnalysisId = null;
   });
-}
+};
 
 // =============================================================
 // Feedback save/update
@@ -172,7 +169,7 @@ if (saveBtn) {
       alert("Error saving feedback");
     }
   });
-}
+};
 
 // Initialize table on DOM load
 document.addEventListener("DOMContentLoaded", loadSubmissions);

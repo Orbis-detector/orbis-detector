@@ -110,9 +110,7 @@ orbis-detector/
 4. **Run the backend server:**
 
    ```bash
-   npm start
-   # or for development
-   npx nodemon server.js
+   node server.js
    ```
 
 5. **Open the frontend:**
@@ -135,16 +133,16 @@ orbis-detector/
 2. Click **“View Detail”** to open a modal with:
    - AI percentage
    - Explanation
-   - Feedback textarea (create / update / delete)
+   - Feedback textarea (create / update)
 
 ---
 
 ## 👥 Team
 
-- Kevin Moreno
-- Javier Narváez
-- Jonathan
-- Samuel
-- Vanessa
+- Jhos Kevin Agudelo Moreno
+- Javier Andres Narvaez Galiano
+- Jonathan Jesús Cardona Restrepo
+- Samuel Santiago Rodríguez Quintero
+- Ivana Vanessa Machado Usuga
 
 ---
